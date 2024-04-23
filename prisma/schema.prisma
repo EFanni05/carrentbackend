@@ -9,3 +9,22 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Cars {
+  id Int @id @default(autoincrement())
+  license_plate_number String @db.VarChar(20)
+  brand String @db.VarChar(255)
+  model String @db.VarChar(255)
+  daily_cost Int
+  created_at DateTime @db.Timestamp() @default(now())
+  updated_at DateTime @db.Timestamp() @default(now())
+  rental Rentals[]
+}
+
+model Rentals {
+  id Int @id @default(autoincrement())
+  car_id Int
+  car Cars @relation(fields: [car_id], references: [id], onUpdate: Cascade)
+  start_date DateTime @db.Date
+  end_date DateTime @db.Date
+}
